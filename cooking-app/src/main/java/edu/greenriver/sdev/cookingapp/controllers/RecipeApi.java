@@ -2,6 +2,8 @@ package edu.greenriver.sdev.cookingapp.controllers;
 
 import edu.greenriver.sdev.cookingapp.model.Recipe;
 import edu.greenriver.sdev.cookingapp.services.RecipeService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,9 +42,9 @@ public class RecipeApi
 
     //http://localhost:8080/recipes
     @PostMapping("")
-    public void addRecipe(@RequestBody Recipe recipe)
+    public ResponseEntity<Recipe> addRecipe(@RequestBody Recipe recipe)
     {
-        service.addRecipe(recipe);
+        return new ResponseEntity<>(service.addRecipe(recipe), HttpStatus.CREATED);
     }
 
     @PostMapping("add")

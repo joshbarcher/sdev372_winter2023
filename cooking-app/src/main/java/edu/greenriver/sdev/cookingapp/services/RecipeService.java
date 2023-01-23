@@ -56,9 +56,12 @@ public class RecipeService
     }
 
     //POST requests (create)
-    public void addRecipe(Recipe newRecipe)
+    public Recipe addRecipe(Recipe newRecipe)
     {
+        //make changes to the recipe later...
+
         recipes.add(newRecipe);
+        return newRecipe;
     }
 
     //PUT requests (update)
