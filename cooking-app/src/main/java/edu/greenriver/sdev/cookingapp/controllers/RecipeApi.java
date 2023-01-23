@@ -31,6 +31,13 @@ public class RecipeApi
         return service.findRecipeByName(recipeName);
     }
 
+    //http://localhost:8080/recipes/filter?vegan=true
+    @GetMapping("filter")
+    public List<Recipe> filterByVegan(@RequestParam boolean vegan)
+    {
+        return service.filterByVegan(vegan);
+    }
+
     //http://localhost:8080/recipes
     @PostMapping("")
     public void addRecipe(@RequestBody Recipe recipe)
@@ -38,13 +45,25 @@ public class RecipeApi
         service.addRecipe(recipe);
     }
 
-    public void updateRecipe()
+    @PostMapping("add")
+    public void addRecipe(@RequestParam String name, @RequestParam double servings,
+                          @RequestParam int cookTime, @RequestParam boolean vegan)
     {
-
+        Recipe recipe = new Recipe(name, List.of(), servings, cookTime, vegan);
+        service.addRecipe(recipe);
     }
 
-    public void deleteRecipe()
+    //http://localhost:8080/recipes
+    @PutMapping("")
+    public void updateRecipe(@RequestBody Recipe updatedRecipe)
     {
+        service.updateRecipe(updatedRecipe);
+    }
 
+    //http://localhost:8080/recipes/Tacos
+    @DeleteMapping("{recipeName}")
+    public void deleteRecipe(@PathVariable String recipeName)
+    {
+        service.deleteRecipe(recipeName);
     }
 }

@@ -75,14 +75,23 @@ public class RecipeService
     }
 
     //DELETE requests (delete)
-    public void deleteRecipe(Recipe deleteRecipe)
+    public void deleteRecipe(String recipeName)
     {
         //filter out just the matching recipe name
-        recipes = recipes.stream()
-            .filter(rec -> !rec.getName().equalsIgnoreCase(deleteRecipe.getName()))
-            .toList();
+        recipes = new ArrayList<>(
+            recipes.stream()
+                .filter(rec -> !rec.getName().equalsIgnoreCase(recipeName))
+                .toList()
+        );
 
-        //Recipe found = findRecipeByName(deleteRecipe.getName());
-        //recipes.remove(found);
+        /*Recipe found = findRecipeByName(recipeName);
+        recipes.remove(found);*/
+    }
+
+    public List<Recipe> filterByVegan(boolean vegan)
+    {
+        return recipes.stream()
+            .filter(recipe -> recipe.isVegan() == vegan)
+            .toList();
     }
 }
