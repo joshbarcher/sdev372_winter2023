@@ -97,4 +97,9 @@ public class RecipeService
             .filter(recipe -> recipe.isVegan() == vegan)
             .toList();
     }
+
+    public boolean isValidRecipe(Recipe recipe)
+    {
+        return recipe.getName() != null && !recipe.getName().isEmpty();
+    }
 }
