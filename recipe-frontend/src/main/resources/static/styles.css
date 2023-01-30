@@ -1,0 +1,21 @@
+li {
+    margin: 6px 0;
+}
+
+span {
+    padding: 2px;
+    margin: 0 8px;
+    display: inline-block;
+    border-radius: 5px;
+}
+
+.servings {
+    border: 2px solid darkblue;
+    background-color: lightblue;
+}
+
+.cook-time {
+    border: 2px solid darkgreen;
+    background-color: lightgreen;
+}
+
