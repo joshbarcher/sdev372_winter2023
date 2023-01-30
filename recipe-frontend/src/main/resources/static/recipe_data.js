@@ -1,5 +1,47 @@
 //run this function on page load
-window.onload = loadRecipes;
+window.onload = function() {
+    //load the recipes
+    loadRecipes();
+
+    //add form event handlers
+    addFormHandler();
+};
+
+function addFormHandler()
+{
+    let formButton = document.querySelector("button");
+    formButton.onclick = handleFormSubmit;
+}
+
+function handleFormSubmit(event)
+{
+    //stop the form from submitting
+    event.preventDefault();
+    console.log("Handled form submit!");
+
+    let newRecipe = {
+        name: document.getElementById("name").value,
+        servings: document.getElementById("servings").value,
+        ingredients: [],
+        vegan: false,
+        cookTime: 0
+    };
+
+    let uri = "http://localhost:8080/recipes";
+    let params = {
+        method: "post",
+        mode: "cors",
+        body: JSON.stringify(newRecipe),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    };
+
+    fetch(uri, params)
+        .then(function(response) {
+            console.log(response);
+        });
+}
 
 function loadRecipes()
 {
