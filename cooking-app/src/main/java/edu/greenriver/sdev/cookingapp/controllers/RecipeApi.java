@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("recipes") //all paths start with "recipes"
 public class RecipeApi
@@ -17,20 +18,27 @@ public class RecipeApi
     public RecipeApi(RecipeService service)
     {
         this.service = service;
+        System.out.println("Service loaded");
     }
 
     //http://localhost:8080/recipes
     @GetMapping("")
-    public List<Recipe> allRecipes()
+    public ResponseEntity<List<Recipe>> allRecipes()
     {
-        return service.allRecipes();
+        return new ResponseEntity<>(service.allRecipes(), HttpStatus.OK);
     }
 
     //http://localhost:8080/recipes/{recipeName}
     @GetMapping("{recipeName}")
-    public Recipe recipeByName(@PathVariable String recipeName)
+    public ResponseEntity<Recipe> recipeByName(@PathVariable String recipeName)
     {
-        return service.findRecipeByName(recipeName);
+        //if the recipe is missing
+        if (service.findRecipeByName(recipeName) == null)
+        {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(service.findRecipeByName(recipeName), HttpStatus.OK);
     }
 
     //http://localhost:8080/recipes/filter?vegan=true
@@ -44,6 +52,13 @@ public class RecipeApi
     @PostMapping("")
     public ResponseEntity<Recipe> addRecipe(@RequestBody Recipe recipe)
     {
+        if (!service.isValidRecipe(recipe))
+        {
+            //no response body, status code 400
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        //response body is saved recipe, status code 201
         return new ResponseEntity<>(service.addRecipe(recipe), HttpStatus.CREATED);
     }
 
@@ -57,9 +72,20 @@ public class RecipeApi
 
     //http://localhost:8080/recipes
     @PutMapping("")
-    public void updateRecipe(@RequestBody Recipe updatedRecipe)
+    public ResponseEntity<Recipe> updateRecipe(@RequestBody Recipe updatedRecipe)
     {
-        service.updateRecipe(updatedRecipe);
+        //if not found
+        if (service.findRecipeByName(updatedRecipe.getName()) == null)
+        {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        //if invalid data
+        else if (!service.isValidRecipe(updatedRecipe))
+        {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(service.updateRecipe(updatedRecipe), HttpStatus.OK);
     }
 
     //http://localhost:8080/recipes/Tacos

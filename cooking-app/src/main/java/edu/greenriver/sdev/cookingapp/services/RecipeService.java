@@ -37,7 +37,21 @@ public class RecipeService
                 "bouillon cube", "rice", "carrots", "peas"
             ))
             .servings(20)
-            .build()
+            .build(),
+            Recipe.builder()
+                .vegan(false)
+                .cookTime(30)
+                .name("Homemade Icecream")
+                .ingredients(List.of())
+                .servings(3)
+                .build(),
+            Recipe.builder()
+                .vegan(false)
+                .cookTime(40)
+                .name("Tri Steak")
+                .ingredients(List.of())
+                .servings(1)
+                .build()
     ));
 
     //GET requests (read)
@@ -65,7 +79,7 @@ public class RecipeService
     }
 
     //PUT requests (update)
-    public void updateRecipe(Recipe updatedRecipe)
+    public Recipe updateRecipe(Recipe updatedRecipe)
     {
         Recipe found = findRecipeByName(updatedRecipe.getName());
         if (found != null)
@@ -75,6 +89,7 @@ public class RecipeService
             found.setCookTime(updatedRecipe.getCookTime());
             found.setServings(updatedRecipe.getServings());
         }
+        return found;
     }
 
     //DELETE requests (delete)
